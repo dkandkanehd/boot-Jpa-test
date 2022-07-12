@@ -10,6 +10,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bootjpa.test.service.TestService;
 import com.bootjpa.test.vo.TestVo;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Controller
 public class TestController {
 	@Autowired
@@ -22,6 +25,10 @@ public class TestController {
 	    List<TestVo> testList = testService.selectTest();
 	    mav.addObject("list", testList);
 		
+	    log.error("TEST");
+	    log.error("TEST");
+	    log.error("TEST");
+	    
 	    return mav;
 	}
 }
