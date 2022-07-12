@@ -1,42 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration>
+<Configuration status="INFO">
 
-    <!-- 해당 설정파일에서 사용하는 프로퍼티
     <Properties>
-        <property name="LOGS_PATH">D:\test_logs</property>
+        <Property name="logFileName">springStudy</Property>
+        <Property name="consoleLayout">%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable</Property>
+        <Property name="fileLayout">%d [%t] %-5level %c(%M:%L) - %m%n</Property>
     </Properties>
-	-->
-    <Appenders>
-        <!-- 콘솔 -->
-        <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative] %-5level %logger{35} - %msg%n" />
-        </Console>
 
-        <!-- 파일
-        <RollingFile name ="RollingFile">
-            <FileName>${LOGS_PATH}/log4j2.log</FileName>
-            <FilePattern>${LOGS_PATH}/log4j2.%d{yyyy-MM-dd}.%i.log.gz</FilePattern>
-            <PatternLayout>
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %5p [%c] %m%n</Pattern>
-            </PatternLayout>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${consoleLayout}" />
+        </Console>
+        <!-- <RollingFile name="file" fileName="logs/${logFileName}.log" filePattern="logs/${logFileName}.%d{yyyy-MM-dd-hh}.log">
+            <PatternLayout pattern="${fileLayout}" />
             <Policies>
-                <SizeBasedTriggeringPolicy size="100MB"/>
-                <TimeBasedTriggeringPolicy interval = "1" modulate = "true"/>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1" />시간별 로그 파일 생성
             </Policies>
-        </RollingFile>
-        -->
+            <DefaultRolloverStrategy max="5" fileIndex="min" />롤링 파일 5개 까지 생성
+        </RollingFile> -->
     </Appenders>
 
     <Loggers>
-        <!-- 로그레벨 순서 : FATAL, ERROR, WARN, INFO, DEBUG, TRACE -->
-        <logger name="com.bootjpa" level="INFO" additivity="false">
+
+        <!-- 스프링 프레임워크에서 찍는건 level을 info로 설정 -->
+        <logger name="com.bootjpa.test" level="INFO" additivity="false" >
             <AppenderRef ref="console" />
-            <!-- <AppenderRef ref="RollingFile" /> -->
+            <!-- <AppenderRef ref="file" /> -->
         </logger>
 
-        <Root level="INFO">
-            <AppenderRef ref="console" />
-            <!-- <AppenderRef ref="RollingFile" /> -->
-        </Root>
+        <!-- QUERY LOG -->
+        <logger name="jdbc.sqlonly" additivity="false" level="INFO">
+            <appender-ref ref="console" />
+        </logger>
+
+		<!-- RESULTSET TABLE -->
+        <logger name="jdbc.resultsettable" additivity="false" level="INFO">
+            <appender-ref ref="console" />
+        </logger>
+
+ 		<!-- query + time -->
+        <logger name="jdbc.sqltiming" level="off"/>
+        
+         <!-- 전체 로그 ( 양 상당히 많아짐 ) -->
+        <logger name="jdbc.audit" level="off"/>
+        
+         <!-- resultsettable + resultset (parameter) -->
+        <logger name="jdbc.resultset" level="off"/>
+        
+        <!-- connection log -->
+        <logger name="jdbc.connection" level="off"/>
+        
+        <root level="INFO" additivity="false">
+            <appender-ref ref="console" />
+        </root>
     </Loggers>
 </Configuration>
